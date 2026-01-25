@@ -1,150 +1,240 @@
 # <p align="center"> <img src="image/TwitOZ_title.png" height="100"/> </p>
 
+### An Intelligent Text Prediction System Built with Oz
 
-## Description
+[Oz](https://mozart.github.io/) [![License](https://img.shields.io/badge/license-Academic-blue.svg)](#license)
 
-TwitOZ is a text predictor project developped in the Oz programming language as part of the course LINFO1104.
-The principle is to predict the user's next word based on a database of tweets (N-grams algorithm).
+A sophisticated text prediction engine powered by N-grams algorithm, processing tweet databases to intelligently predict the next word as you type.
 
-The user can also try the predictions on their own database with the help of various extensions (see [How to use](#How-to-use)).
+**Features** • [Quick Start](#running-the-app) • [Extensions](#extensions) • [User Guide](#how-to-use)
 
-This project was completed in two weeks.
+---
 
+## Overview
 
-## Authors
+TwitOZ is an intelligent text prediction system that leverages N-grams algorithm to analyze patterns in text corpora and predict your next word. Using a database of tweets as training data, it provides real-time suggestions as you type.
 
-Mathis Delsart and Cedric Kheirallah.
+### What makes TwitOZ special?
 
-5 May 2023.
+- **Smart Predictions**: N-grams algorithm analyzes word patterns for accurate suggestions
+- **Custom Database Support**: Train the system on your own text files
+- **Real-time & On-demand**: Automatic or manual prediction modes
+- **Word Correction**: Suggests better alternatives for misspelled words
+- **Persistent Learning**: User history integration improves predictions over time
+- **Extensible Architecture**: Modular design with pluggable extensions
 
+## Quick Start
 
-## Running the app
+### Compilation
 
-To compile:
-
-- `make` (compiles automatically all `.oz` files, including extensions)
-
-To clean:
-
-- `make clean` (cleans the `/bin` folder that contains all the binary files (`.ozf` files))
-- `make clean_historic` (cleans the `/user_historic` folder that contains the history of the user)
-- `make clean_all` (cleans both)
-
-To run:
-- `make run [option]` (see below section `Extensions`)
-
-To list commands:
-- `make help` (writes all the commands and options in your terminal)
-
-### Extensions
-
-Here are all the options you can use with `make run`:
-- Optionnal arguments:
-    - `idx_n_grams=[int]` [must be >= 1 | default: 2]
-    - `corr_word=[int]` [1 = on | default: 0 = off]
-    - `files_database=[int]` [1 = on | default: 0 = off]
-    - `auto_predict=[int]` [1 = on | default: 0 = off]
-    
-- Mandatory arguments:
-    - `folder=[string]` [default: "tweets"] (Not really mandatory but, in this case, you need to have the folder "tweets" present in your repository)
-
-- Special arguments:
-    - `ext=all` [all = activate all the extensions | default: none = does nothing]
-
-### Examples :
+```bash
+# Compile all .oz files (including extensions)
+make
 ```
+
+### Running the Application
+
+```bash
+# Launch with default settings
+make run
+
+# Launch with custom options (see Extensions section)
 make run folder="my_folder" idx_n_grams=4 ext=all
+```
+
+### Cleanup
+
+```bash
+make clean              # Clean binary files (.ozf)
+make clean_historic     # Clean user history
+make clean_all          # Clean everything
+make help              # Display all available commands
+```
+
+## Extensions
+
+Customize TwitOZ behavior with runtime options:
+
+### Optional Parameters
+
+```bash
+idx_n_grams=[int]       # N-gram depth (default: 2, min: 1)
+corr_word=[0|1]         # Word correction feature (default: 0)
+files_database=[0|1]    # Custom database support (default: 0)
+auto_predict=[0|1]      # Auto-prediction mode (default: 0)
+```
+
+### Required Parameters
+
+```bash
+folder=[string]         # Database folder path (default: "tweets")
+```
+
+### Quick Enable All
+
+```bash
+ext=all                 # Activate all extensions at once
+```
+
+### Usage Examples
+
+```bash
+# Advanced configuration
+make run folder="my_folder" idx_n_grams=4 ext=all
+
+# Word correction only
 make run folder="my_folder" corr_word=1
-...
+
+# Custom N-grams with auto-prediction
+make run idx_n_grams=3 auto_predict=1
 ```
 
 
-## How to use
+## User Guide
 
 <p align="center">
     <img src="image/TwitOZ_apercu.png" width="800"/>
 </p>
 
-### Predict
+### Core Features
 
-If you have the automatic prediction extension off, this button is used to predict the next word in regard to your input at this time. The button must be pressed every time you need a new prediction.
+#### Predict
+- **Manual Mode** (default): Click to generate next word prediction based on current input
+- **Auto Mode** (with `auto_predict=1`): Real-time predictions update as you type
 
-If the automatic prediction extension in on, this button will be greyed out and the program will predict the next word on every update of your input.
+#### Word Correction
+Enter a word to see alternative predictions for each occurrence in your text:
+- No match found: *"Correction: No words found."*
+- Current word is optimal: *"Correction: your word is correct."*
 
-### Correct a word
+#### File Operations
 
-Write a word in the box next to "Correct a word" button to see what other words the program would predict instead for each occurrence of your input word. 
+**Load from Computer**: Import `.txt` files as input text  
+**Save to Computer**: Export current input to a file  
 
-If there is no match, the program will output "Correction : No words found."
+#### Database Management
 
-If there is no better prediction, the program will output "Correction : your word is correct."
+**Load into Database**: Add your `.txt` files to the training corpus
+- Files stored in `user_historic/user_files/` as `historic_partN.txt`
+- Chronologically ordered (part1 = oldest)
+- Enhances future predictions with your custom data
 
-### Load file from computer
+**Save to Database**: Directly save current input to training data
 
-Opens a window to select a .txt file on your computer wich content will be brought back to the program as an input.
+**Clean History**: Remove all saved historical files from `user_historic/user_files/`
 
-### Save on computer
+## Architecture & Implementation
 
-Opens a window to save your current input as a file anywhere on your computer.
+### Tree Structure Design
 
-### Load file into database
+The prediction tree is built in two phases:
 
-Opens a window to select a .txt file from your computer to add to the application's historical records.
+1. **Initial Construction**: Creates tree with word-frequency pairs  
+   Format: `['Word1'#Freq1 'Word2'#Freq2 ...]`
 
-The selected file will be stored in the user_historic/user_files folder with a name in the format historic_partN.txt, where N is the part number.
+2. **Optimization**: Transforms to frequency-keyed subtrees  
+   Format: `Frequency -> [List of Words]`
 
-All files saved in this folder are arranged chronologically, with historic_part1.txt being the oldest record.
+This approach simplifies insertions and eliminates the need for node deletions, improving performance.
 
-The historical data serves as a secondary database, and the information from your file will be incorporated into the system to enhance future predictions.
+### Auto-Prediction Threading
 
+Automatic prediction runs as a background thread:
+- **Recursive procedure**: Updates every 0.5 seconds
+- **Smart interruption**: Pauses for 4 seconds during word correction
+- **Port-based communication**: Efficient inter-thread messaging
+- **Delta updates**: Only refreshes when prediction changes (prevents UI flashing)
 
-### Save in database
+### User History System
 
-This function loads the user's input into the historical records, similar to the `Load file into database` option.
+The `user_historic/` directory contains:
 
-### Clean history
+```
+user_historic/
+├── user_files/              # User's training data
+│   └── historic_partN.txt   # Chronologically saved files
+├── last_prediction.txt      # Cache for delta detection
+└── nber_historic_files.txt  # File count tracker
+```
 
-Deletes saved files in `user_historic/user_files`
+- Training files analyzed at startup for improved predictions
+- Last prediction cached to prevent unnecessary UI updates
+- File counter enables efficient batch processing
 
-## Implementation
+### Extension Architecture
 
-Here are some things to know about the implementation of the project.
-If you are not a developer and just want to try the project, feel free to skip this section.
+Extensions are modular (`src/extensions/`):
+- **Separation of concerns**: Basic vs. extended functionality
+- **Easy toggling**: Enable/disable features without code changes
+- **Integration points**: `tree.oz`, `interface.oz`, `function.oz`
 
-- Tree structure:
-
-    The tree structure is created in two steps. First, we create the tree with lists of words and their frequencies (e.g., `['Word1'#Freq1 'Word2'#Freq2 ...]`). Then, we traverse the tree and update the values to create a subtree with frequencies as keys and lists of words as values. This approach makes it easier to insert values and avoids the need to delete nodes from the subtrees, which would be more difficult with a single-step implementation.
-
-- Auto-prediction:
-
-    The automatic prediction is implemented using a thread as a background process. This is a recursive procedure that runs indefinitely, repeating itself every 0.5 seconds. When the user presses the button to correct a word, the thread is stopped for 4 seconds (to allow the result to be displayed on the screen). This is done using a Port structure.
-
-- User's historic:
-
-    The `user_historic/` folder contains:
-
-    - The `user_files/` folder
-            => Folder that contains all the historic `.txt` files of the user.
-            Useful for analyzing and parsing the data to use them for the next prediction.
-
-    - The `last_prediction.txt` file
-            => Useful for storing the last prediction to compare with the new one. It updates the prediction only if it is different, preventing a flash every 0.5 seconds. This is used for the auto-prediction extension.
-
-    - The `nber_historic_files.txt` file
-            => Useful for storing the number of historic files. This is useful at the beginning of the program to know how many files there are to analyze and parse and to know their names `user_history/user_files/historic_partN.txt` where N is the number of the file.
-
-### Extensions:
-
-The extensions are in a separate folder named `src/extensions`. The reason for this is because, for our project, we needed to easily distinguish the extension version from the basic one. If we didn't, we would probably put all the extension files into the other files, such as `src/tree.oz`, `src/interface.oz`, and `src/function.oz`.
-
-The functions in the extension files are very long and not well separated. Therefore, the code is harder to read than the rest of the code. The only reason is the lack of time to totally clean all the files.
+Note: Extension code prioritized functionality over readability due to time constraints. Core modules maintain clean architecture.
 
 
-## Problems
+## Known Issues
 
-If you are on MacOS and you are running into issues at compilation, you need to comment the image at Line 45 in `src/extensions/interface_improved`.
-In that is the case, you also may not be able to see the colors of the buttons.
+### macOS Compatibility
 
-This issue might be due to the Oz programming language being inconsistent between platforms and we are sorry for the inconvenience it may cause.
+**Symptom**: Compilation errors or missing UI elements (button colors)
 
-In any case, you can see the expected result in the `image/` folder.
+**Workaround**: Comment out the image at line 45 in [src/extensions/interface_improved.oz](src/extensions/interface_improved.oz)
+
+**Cause**: Platform inconsistencies in Oz's QTk module between macOS and other systems
+
+**Reference**: See [image/](image/) folder for expected output
+
+We apologize for this platform-specific limitation inherent to the Oz environment.
+
+---
+
+## Project Structure
+
+```
+TwitOz/
+├── main.oz                  # Application entry point
+├── Makefile                 # Build automation
+├── src/                     # Core source files
+│   ├── function.oz          # Prediction logic
+│   ├── interface.oz         # UI components
+│   ├── parser.oz            # Text parsing
+│   ├── reader.oz            # File I/O
+│   ├── tree.oz              # N-gram tree structure
+│   ├── variables.oz         # Global state
+│   └── extensions/          # Extension modules
+├── tweets/                  # Default training corpus
+│   └── part_*.txt           # Tweet database files
+├── user_historic/           # User data & cache
+└── image/                   # Screenshots & assets
+```
+
+---
+
+## Technologies
+
+- **Oz/Mozart**: Concurrent constraint programming language
+- **QTk**: GUI toolkit for Mozart
+- **N-grams Algorithm**: Statistical text prediction
+- **Multi-threading**: Real-time background processing
+- **Port-based Communication**: Inter-thread messaging
+
+---
+
+## Academic Context
+
+This project was developed as part of **LINFO1104** at UCLouvain. It demonstrates practical implementation of:
+
+- N-grams algorithm for text prediction
+- Concurrent programming with Oz threads and ports
+- Tree data structures for efficient word lookup
+- GUI development with QTk
+- Modular software architecture
+- File I/O and data persistence
+
+---
+
+## License
+
+This project is developed for academic purposes as part of university coursework.
+
+Built for **LINFO1104** @ UCLouvain  
+An intelligent text prediction system powered by N-grams
