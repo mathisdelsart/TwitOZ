@@ -2,7 +2,7 @@
 
 ### An Intelligent Text Prediction System Built with Oz
 
-[Oz](https://mozart.github.io/) [![License](https://img.shields.io/badge/license-Academic-blue.svg)](#license)
+![Language](https://img.shields.io/badge/Language-Oz%2FMozart-orange?style=flat) ![N-grams](https://img.shields.io/badge/Algorithm-N--grams-blue?style=flat) ![License](https://img.shields.io/badge/License-Academic-green?style=flat)
 
 A sophisticated text prediction engine powered by N-grams algorithm, processing tweet databases to intelligently predict the next word as you type.
 
