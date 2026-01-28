@@ -219,22 +219,41 @@ TwitOz/
 
 ---
 
-## Academic Context
+## Authors
 
-This project was developed as part of **LINFO1104** at UCLouvain. It demonstrates practical implementation of:
+<div align="center">
 
-- N-grams algorithm for text prediction
-- Concurrent programming with Oz threads and ports
-- Tree data structures for efficient word lookup
-- GUI development with QTk
-- Modular software architecture
-- File I/O and data persistence
+<table>
+  <tr>
+    <td width="180" align="left">
+      <img src="https://img.shields.io/badge/GitHub-mathisdelsart-black?logo=github" valign="middle"/>
+    </td>
+    <td align="left">
+      <strong>Mathis DELSART</strong>
+    </td>
+  </tr>
+  <tr>
+    <td width="180" align="left">
+      <img src="https://img.shields.io/badge/GitHub-CC4K-black?logo=github" valign="middle"/>
+    </td>
+    <td align="left">
+      <strong>Cédric KHEIRALLAH</strong>
+    </td>
+  </tr>
+</table>
 
----
+</div>
 
 ## License
 
 This project is developed for academic purposes as part of university coursework.
 
-Built for **LINFO1104** @ UCLouvain  
-An intelligent text prediction system powered by N-grams
+---
+
+<div align="center">
+
+**Built for LINFO1104 - Concepts des langages de programmation @ UCLouvain** (Université catholique de Louvain).
+
+*An intelligent text prediction system powered by N-grams*
+
+</div>
