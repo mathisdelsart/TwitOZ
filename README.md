@@ -1,5 +1,7 @@
 # <p align="center"> <img src="image/TwitOZ_title.png" height="100"/> </p>
 
+<div align="center">
+
 ### An Intelligent Text Prediction System Built with Oz
 
 ![Language](https://img.shields.io/badge/Language-Oz%2FMozart-orange?style=flat) ![N-grams](https://img.shields.io/badge/Algorithm-N--grams-blue?style=flat) ![License](https://img.shields.io/badge/License-Academic-green?style=flat)
@@ -7,6 +9,8 @@
 A sophisticated text prediction engine powered by N-grams algorithm, processing tweet databases to intelligently predict the next word as you type.
 
 **Features** • [Quick Start](#running-the-app) • [Extensions](#extensions) • [User Guide](#how-to-use)
+
+</div>
 
 ---
 
